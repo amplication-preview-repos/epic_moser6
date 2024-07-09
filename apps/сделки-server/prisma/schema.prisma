@@ -1,0 +1,159 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Product {
+  id          String     @id @default(cuid())
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  name        String?
+  description String?
+  price       Float?
+  deliveries  Delivery[]
+}
+
+model Delivery {
+  id                     String                             @id @default(cuid())
+  createdAt              DateTime                           @default(now())
+  updatedAt              DateTime                           @updatedAt
+  deliveryNumber         String?
+  secured                Boolean?
+  status                 EnumDeliveryStatus?
+  saleVolume             Int?
+  salePrice              Float?
+  totalAmount            Float?
+  basis                  String?
+  purchaseRegion         String?
+  purchaseVolume         Int?
+  deficit                Int?
+  averagePurchasePrice   Float?
+  transportRate          Float?
+  startOfShipment        DateTime?
+  contractTrainDispatch  DateTime?
+  vesselDispatch         DateTime?
+  supplierPaymentStatus  EnumDeliverySupplierPaymentStatus?
+  paymentToSupplier      Float?
+  invoiceDirectionDate   DateTime?
+  clientAdvance          Float?
+  advanceAmount          Float?
+  documentDispatchDate   DateTime?
+  clientPaymentStatus    EnumDeliveryClientPaymentStatus?
+  clientPaymentAmount    Float?
+  guSubmissionStatus     EnumDeliveryGuSubmissionStatus?
+  cnyExchangeRate        Float?
+  exportContractNumber   String?
+  deliveryOwner          String?
+  actualShipped          Int?
+  plannedTrainDispatch   DateTime?
+  actualTrainDispatch    DateTime?
+  comments               String?
+  finish                 Boolean?
+  fss                    EnumDeliveryFss?
+  st1                    EnumDeliverySt1?
+  survey                 EnumDeliverySurvey?
+  paymentProblems        Boolean?
+  estimatedLogisticsRate Float?
+  hedgeStatus            EnumDeliveryHedgeStatus?
+  product                Product?                           @relation(fields: [productId], references: [id])
+  productId              String?
+  client                 Client?                            @relation(fields: [clientId], references: [id])
+  clientId               String?
+  supplier               Supplier?                          @relation(fields: [supplierId], references: [id])
+  supplierId             String?
+  transporter            Transporter?                       @relation(fields: [transporterId], references: [id])
+  transporterId          String?
+  manager                Manager?                           @relation(fields: [managerId], references: [id])
+  managerId              String?
+}
+
+model Supplier {
+  id            String     @id @default(cuid())
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  deliveries    Delivery[]
+  phoneNumber   String?
+  email         String?
+  address       String?
+  name          String?
+  contactPerson String?
+}
+
+model Client {
+  id            String     @id @default(cuid())
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  deliveries    Delivery[]
+  name          String?
+  email         String?
+  contactPerson String?
+  phoneNumber   String?
+  address       String?
+}
+
+model Manager {
+  id         String     @id @default(cuid())
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  name       String?
+  email      String?
+  phone      String?
+  department String?
+  deliveries Delivery[]
+}
+
+model Contract {
+  id             String    @id @default(cuid())
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  contractNumber String?
+  description    String?
+  startDate      DateTime?
+  endDate        DateTime?
+}
+
+model Transporter {
+  id          String     @id @default(cuid())
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  deliveries  Delivery[]
+  name        String?
+  phoneNumber String?
+  email       String?
+}
+
+enum EnumDeliveryStatus {
+  Option1
+}
+
+enum EnumDeliverySupplierPaymentStatus {
+  Option1
+}
+
+enum EnumDeliveryClientPaymentStatus {
+  Option1
+}
+
+enum EnumDeliveryGuSubmissionStatus {
+  Option1
+}
+
+enum EnumDeliveryFss {
+  Option1
+}
+
+enum EnumDeliverySt1 {
+  Option1
+}
+
+enum EnumDeliverySurvey {
+  Option1
+}
+
+enum EnumDeliveryHedgeStatus {
+  Option1
+}
